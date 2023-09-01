@@ -10,7 +10,7 @@ def pollardRho(n):
     Pollard's Rho method to factor large integers, I
     will use the polynomial F(x) = x ** 2 + c
     x and c are initialized psuedorandom from
-    the range [1, 100]
+    the range [1, N]
 
     the usage of Floyd's cycle detection method,
     number theory (gcd), and the birthday paradox
@@ -23,8 +23,9 @@ def pollardRho(n):
         print("{}={}*{}".format(n, 2, int(n / 2)))
         return
 
-    c = random.randint(1, 1000)
-    x = random.randint(1, 1000)
+    N = 100000
+    c = random.randint(0, N-1)
+    x = random.randint(2, N-1)
     y = x
     d = 1
 
@@ -39,8 +40,8 @@ def pollardRho(n):
         d = math.gcd(abs(x - y), n)
 
         if (d == n):
-            c = random.randint(1, 1000)
-            x = random.randint(1, 1000)
+            c = random.randint(0, N-1)
+            x = random.randint(2, N-1)
             y = x
             d = 1
     print("{}={}*{}".format(n, d, int(n / d)))
