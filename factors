@@ -19,14 +19,11 @@ def pollardRho(n):
     Args:
         n (int): composite number to factorize
     """
-    if (n == 1):
-        print("{}={}*{}".format(1, 1, 1))
-        return
     if (n % 2 == 0):
         print("{}={}*{}".format(n, 2, int(n / 2)))
         return
 
-    N = 100000
+    N = 1000000000
     c = random.randint(0, N-1)
     x = random.randint(2, N-1)
     y = x
