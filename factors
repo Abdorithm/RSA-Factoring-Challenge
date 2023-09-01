@@ -2,7 +2,7 @@
 
 import sys
 
-n = 21000000
+n = 19000000
 primes = [2]
 
 
