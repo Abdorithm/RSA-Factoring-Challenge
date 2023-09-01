@@ -1,31 +1,52 @@
 #!/usr/bin/python3
 
 import sys
+import math
+import random
 
-n = 1000000
-primes = [2]
 
+def pollardRho(n):
+    """
+    Pollard's Rho method to factor large integers, I
+    will use the polynomial F(x) = x ** 2 + c
+    x and c are initialized psuedorandom from
+    the range [1, 100]
 
-def sieve(n):
-    prime = [True for i in range(n+1)]
-    for i in range(3, n+1, 2):
-        if prime[i] is True:
-            primes.append(i)
-            for j in range(i * i, n+1, i):
-                prime[j] = False
+    the usage of Floyd's cycle detection method,
+    number theory (gcd), and the birthday paradox
+    will be of assistance to solve this problem
+
+    Args:
+        n (int): composite number to factorize
+    """
+    if (n % 2 == 0):
+        print("{}={}*{}".format(n, 2, int(n / 2)))
+        return
+
+    c = random.randint(1, 1000)
+    x = random.randint(1, 1000)
+    y = x
+    d = 1
+
+    while (d == 1):
+        # Tortoise
+        x = (x ** 2 + c) % n
+
+        # Hare
+        y = (y ** 2 + c) % n
+        y = (y ** 2 + c) % n
+
+        d = math.gcd(abs(x - y), n)
+
+        if (d == n):
+            c = random.randint(1, 1000)
+            x = random.randint(1, 1000)
+            y = x
+            d = 1
+    print("{}={}*{}".format(n, d, int(n / d)))
     return
 
 
-sieve(n)
-
-
-def factor(line):
-    n = int(line)
-    for p in primes:
-        if n % p == 0:
-            print("{}={}*{}".format(n, p, int(n / p)))
-            return
-
-
-with open(sys.argv[1], 'r') as f:
-    [factor(line) for line in f.readlines()]
+if __name__ == "__main__":
+    with open(sys.argv[1], 'r') as f:
+        [pollardRho(int(line)) for line in f.readlines()]
