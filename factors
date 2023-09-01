@@ -1,0 +1,31 @@
+#!/usr/bin/python3
+
+import sys
+
+n = 10000000
+primes = [2]
+
+
+def sieve(n):
+    prime = [True for i in range(n+1)]
+    for i in range(3, n+1, 2):
+        if prime[i] is True:
+            primes.append(i)
+            for j in range(i * i, n+1, i):
+                prime[j] = False
+    return
+
+
+sieve(n)
+
+
+def factor(line):
+    n = int(line)
+    for p in primes:
+        if n % p == 0:
+            print("{}={}*{}".format(n, p, int(n / p)))
+            return
+
+
+with open(sys.argv[1], 'r') as f:
+    [factor(line) for line in f.readlines()]
