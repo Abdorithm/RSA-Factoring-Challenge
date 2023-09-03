@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "gmp.h"
+#include <gmp.h>
 #define ui_int unsigned long int
 #define SIZE 100000
 #define TRIAL_PRIMES 9592
