@@ -4,8 +4,8 @@
 #include <string.h>
 #include "gmp.h"
 #define ui_int unsigned long int
-#define SIZE 1000000
-#define TRIAL_PRIMES 78498
+#define SIZE 100000
+#define TRIAL_PRIMES 9592
 
 /**
  * readLine - ...
@@ -90,11 +90,9 @@ int trialdiv(char *buffer, int primes[])
 
 		if (mpz_cmp_ui(div, 0) == 0)
 		{
-			mpz_out_str(stdout, 10, n);
-			printf("=%i*", primes[i]);
+			mpz_out_str(stdout, 10, n), printf("=%i*", primes[i]);
 			mpz_divexact_ui(n, n, primes[i]);
-			mpz_out_str(stdout, 10, n);
-			printf("\n");
+			mpz_out_str(stdout, 10, n), printf("\n");
 			mpz_clear(n);
 			mpz_clear(div);
 			return (1);
@@ -104,43 +102,44 @@ int trialdiv(char *buffer, int primes[])
 }
 
 /**
- * pollard - Pollard's p-1 method
+ * pollard - Pollard's Rho method
  * @buffer: the composite n
  */
 void pollard(char *buffer)
 {
-	mpz_t n, a, _gcd, pow;
-	ui_int i = 1;
+	mpz_t n, x, y, _gcd, abs;
+	ui_int i = 2;
 
-	mpz_init(n);
-	mpz_init(a);
-	mpz_init(_gcd);
-	mpz_init(pow);
+	mpz_init(n), mpz_init(x), mpz_init(_gcd), mpz_init(y);
+	mpz_init(abs);
 
-	mpz_set_str(n, buffer, 10);
-	mpz_set_ui(a, 2);
+	mpz_set_str(n, buffer, 10), mpz_set_ui(x, i);
+	mpz_set(y, x), mpz_set_ui(_gcd, 1);
 
-	while (++i)
+	while (mpz_cmp_ui(_gcd, 1) == 0)
 	{
-		mpz_powm_ui(a, a, i, n);
-		mpz_sub_ui(pow, a, 1);
-		mpz_gcd(_gcd, pow, n);
-		if (mpz_cmp(_gcd,  n) != 0 && mpz_cmp_ui(_gcd, 1) != 0)
+		mpz_pow_ui(x, x, 2), mpz_add_ui(x, x, 1);
+		mpz_mod(x, x, n);
+
+		mpz_pow_ui(y, y, 2), mpz_add_ui(y, y, 1);
+		mpz_mod(y, y, n);
+
+		mpz_pow_ui(y, y, 2), mpz_add_ui(y, y, 1);
+		mpz_mod(y, y, n);
+
+		mpz_sub(abs, x, y);
+		mpz_abs(abs, abs);
+		mpz_gcd(_gcd, abs, n);
+		if (mpz_cmp(_gcd,  n) == 0)
 		{
-			mpz_clear(a);
-			mpz_clear(pow);
-			mpz_out_str(stdout, 10, n);
-			printf("=");
-			mpz_out_str(stdout, 10, _gcd);
-			printf("*");
-			mpz_divexact(n, n, _gcd);
-			mpz_out_str(stdout, 10, n);
-			printf("\n");
-			mpz_clear(n);
-			mpz_clear(_gcd);
-			return;
+			mpz_add_ui(x, x, 1), mpz_set(y, x), mpz_set_ui(_gcd, 1);
 		}
 	}
+	mpz_out_str(stdout, 10, n), printf("=");
+	mpz_out_str(stdout, 10, _gcd), printf("*");
+	mpz_divexact(n, n, _gcd);
+	mpz_out_str(stdout, 10, n), printf("\n");
+	mpz_clear(n), mpz_clear(_gcd), mpz_clear(abs), mpz_clear(x), mpz_clear(y);
 }
 
 /**
