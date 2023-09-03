@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "gmp.h"
+#include <gmp.h>
 #define ui_int unsigned long int
 #define SIZE 100000
 #define TRIAL_PRIMES 9592
@@ -98,6 +98,7 @@ int trialdiv(char *buffer, int primes[])
 			return (1);
 		}
 	}
+	mpz_clear(n), mpz_clear(div);
 	return (0);
 }
 
