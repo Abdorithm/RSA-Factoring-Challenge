@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include <gmp.h>
+#include "gmp.h"
 #define ui_int unsigned long int
 #define SIZE 100000
 #define TRIAL_PRIMES 9592
@@ -109,12 +107,11 @@ int trialdiv(char *buffer, int primes[])
 void pollard(char *buffer)
 {
 	mpz_t n, x, y, _gcd, abs;
-	ui_int i = 2;
 
 	mpz_init(n), mpz_init(x), mpz_init(_gcd), mpz_init(y);
 	mpz_init(abs);
 
-	mpz_set_str(n, buffer, 10), mpz_set_ui(x, i);
+	mpz_set_str(n, buffer, 10), mpz_set_ui(x, 2);
 	mpz_set(y, x), mpz_set_ui(_gcd, 1);
 
 	while (mpz_cmp_ui(_gcd, 1) == 0)
